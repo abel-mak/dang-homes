@@ -1,42 +1,22 @@
 import { gql } from "@apollo/client";
 import client from "client";
-import { BlockRenderer } from "components/BlockRenderer";
+import { getPageStaticProps } from "utils/getPageStaticProps";
+import Page from "./index";
 
-export default function Pages(props) {
-  // console.log(props);
-  console.log(props);
-  return <BlockRenderer blocks={props.blocks}></BlockRenderer>
-}
+export default Page;
 
-export const getStaticProps = async (context) => {
-  const uri = `/${context.params.slug.join("/")}/`;
-  const { data } = await client.query({
-    query: gql`
-      query NewQuery($uri: String!) {
-        nodeByUri(uri: $uri) {
-          ... on Page {
-            id
-            title
-            blocks(postTemplate: false)
-          }
-        }
-      }
-    `,
-    variables: {
-      uri,
-    },
-  });
-  const { blocks, id, title } = data.nodeByUri;
-  return {
-    props: { blocks, id, title },
-  };
-};
+export const getStaticProps = getPageStaticProps;
 
 export const getStaticPaths = async () => {
   const { data } = await client.query({
     query: gql`
-      query AllPAgesQuery {
+      query AllPagesQuery {
         pages {
+          nodes {
+            uri
+          }
+        }
+        properties {
           nodes {
             uri
           }
@@ -44,9 +24,8 @@ export const getStaticPaths = async () => {
       }
     `,
   });
-
   return {
-    paths: data.pages.nodes
+    paths: [...data.pages.nodes, ...data.properties.nodes]
       .filter((page) => page.uri != "/")
       .map((page) => {
         return {
@@ -55,6 +34,6 @@ export const getStaticPaths = async () => {
           },
         };
       }),
-    fallback: "blocking",
+    fallback: false,
   };
 };

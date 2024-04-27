@@ -1,9 +1,10 @@
+import { ButtonLink } from "components/ButtonLink/ButtonLink";
 import Link from "next/link";
 import { FaHouseUser, FaHeart } from "react-icons/fa";
 import { v4 } from "uuid";
 
-export default function MenuItems(props) {
-  console.log(props);
+export default function MenuItems({ menuItems, callToActionButton }) {
+  // console.log(props);
   return (
     <div className="bg-slate-800 text-white px-5 h-[64px] sticky top-0 z-20 flex">
       <div className="py-4 pl-5 flex text-pink-600">
@@ -11,7 +12,7 @@ export default function MenuItems(props) {
         <FaHeart size={30}></FaHeart>
       </div>
       <div className="flex flex-1 justify-end">
-        {(props.menuItems || []).map((item) => {
+        {(menuItems || []).map((item) => {
           const id = v4();
           return (
             <div
@@ -42,10 +43,10 @@ export default function MenuItems(props) {
         })}
       </div>
       <div className="ml-3 my-auto">
-        <Link className="bg-pink-600 hover:bg-pink-700 inline-block my-2 px-4 py-2 uppercase rounded-md cursor-pointer font-bold text-white"
-         href={props.callToActionButton.destination} >
-          {props.callToActionButton.label}
-        </Link>
+        <ButtonLink
+          destination={callToActionButton.destination}
+          label={callToActionButton.label}
+        />
       </div>
     </div>
   );
