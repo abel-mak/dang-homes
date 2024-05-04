@@ -6,6 +6,7 @@ import { v4 } from "uuid";
 import { Columns } from "components/Columns/Columns";
 import { Column } from "components/Column/Column";
 import Image from "next/image";
+import { PropertySearch } from "components/PropertySearch";
 
 export const BlockRenderer = ({ blocks }) => {
   // if (!blocks || !blocks.length) return
@@ -22,6 +23,7 @@ export const BlockRenderer = ({ blocks }) => {
         ""
       );
     switch (block.name) {
+      case "core/post-title":
       case "core/heading":
         return (
           <Heading
@@ -84,7 +86,8 @@ export const BlockRenderer = ({ blocks }) => {
             height={block.attributes.height}
           />
         );
-
+      case "acf/property-search":
+        return <PropertySearch key={v4()}/>
       default:
         console.log("unknown block", block);
         return null;

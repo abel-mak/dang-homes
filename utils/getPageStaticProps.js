@@ -1,6 +1,5 @@
 import { gql } from "@apollo/client";
 import client from "client";
-import { cleanAndTransformBlocks } from "./cleanAndTransformBlocks";
 
 export const getPageStaticProps = async (context) => {
   const uri = context.params?.slug ? `/${context.params.slug.join("/")}/` : "/";
@@ -17,6 +16,7 @@ export const getPageStaticProps = async (context) => {
           ... on Property {
             id
             title
+            blocks(postTemplate: false)
             propertyCustomFields {
               bathrooms
               bedrooms
@@ -65,7 +65,8 @@ export const getPageStaticProps = async (context) => {
       uri,
     },
   });
-  console.log(data.nodeByUri?.blocks);
+  console.log("===================");
+
   return {
     props: {
       blocks: data.nodeByUri.blocks

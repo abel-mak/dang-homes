@@ -1,6 +1,9 @@
 
 # Notes
 
+## how to create custom block
+ - check create-custom-block.md
+
 ## advanced custome fields
  - acf custome fields are assigned to acf option page
  - to create custom option page use function acf_add_option_page

@@ -10,9 +10,9 @@ export default function Page(props) {
         menuItems={props.menuItems}
         callToActionButton={props.callToActionButton}
       ></MenuItems>
-      <BlockRenderer blocks={props.blocks}></BlockRenderer>;
+      <BlockRenderer blocks={props.blocks}></BlockRenderer>
     </div>
-  );
+  )
 }
 
 export const getStaticProps = getPageStaticProps;
