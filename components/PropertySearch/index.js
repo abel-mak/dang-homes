@@ -8,37 +8,63 @@ import { Filter } from "./Filter";
 export const PropertySearch = () => {
   const [properties, setProperties] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
-  const query = {};
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  /** set query initial state*/
+  const tmpQuery = {};
+  for (const key of searchParams.keys()) {
+    const value = searchParams.get(key);
+    if (
+      (key.toLowerCase() != "hasParking" &&
+        key.toLowerCase() != "petFriendly") ||
+      value == "true"
+    )
+      tmpQuery[key.toLowerCase()] = searchParams.get(key);
+  }
+  const [query, setQuery] = useState(tmpQuery);
+
+  const search = async () => {
+    const response = await fetch(
+      "/api/properties?" + new URLSearchParams(query)
+    );
+    const json = await response.json();
+    const totalResults = json?.pageInfo?.offsetPagination.total;
+
+    setProperties(json.nodes);
+    setTotalPages(Math.ceil(totalResults / 4));
+    console.log("search", query);
+    // console.log("pages", json?.pageInfo?.offsetPagination.total)
+  };
 
   const handlePageClick = (pageNumber) => {
     router.push(`${router.query.slug.join("/")}?page=${pageNumber}`);
   };
 
-  for (const key of searchParams.keys()) {
-    query[key] = searchParams.get(key);
-  }
-  useEffect(() => {
-    const search = async () => {
-      const response = await fetch(
-        "/api/properties?" + new URLSearchParams(query)
-      );
-      const json = await response.json();
-      const totalResults = json?.pageInfo?.offsetPagination.total;
+  const updateQuery = (key, value) => {
+    query[key] = value;
+  };
 
-      setProperties(json.nodes);
-      setTotalPages(Math.ceil(totalResults / 4));
-      // console.log("pages", json?.pageInfo?.offsetPagination.total)
-    };
+  const submit = () => {
+    const tmpQuery = query;
+    delete tmpQuery.page;
+    delete tmpQuery.slug;
+    router.push(`${router.query.slug.join("/")}?${new URLSearchParams(query)}`);
+  };
+
+  useEffect(() => {
     search();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query]);
 
   return (
     <div>
-      <Filter/>
+      <Filter updateQuery={updateQuery} submit={submit} query={query} />
       <Results properties={properties}></Results>
-      <Pagination totalPages={totalPages} handlePageClick={handlePageClick}></Pagination>
+      <Pagination
+        totalPages={totalPages}
+        handlePageClick={handlePageClick}
+      ></Pagination>
     </div>
   );
 };

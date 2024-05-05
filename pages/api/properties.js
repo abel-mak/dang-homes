@@ -15,11 +15,11 @@ export default async function properties(req, res) {
   const offset = ((page < 1 ? 1 : page) - 1) * PAGE_SIZE;
   let filter = "[";
   if (hasParking)
-    filter += `{ key: "has_parking", value: "${Number(
+    filter += `{ key: "has_parking" value: "${Number(
       hasParking == "true"
     )}" },`;
   if (petFriendly)
-    filter += `{ key: "has_parking", value: "${Number(
+    filter += `{ key: "pet_friendly" value: "${Number(
       hasParking == "true"
     )}" },`;
   if (bathrooms) filter += `{ key: "bathrooms", value: "${bathrooms}" },`;
@@ -27,7 +27,7 @@ export default async function properties(req, res) {
   if (minPrice)
     filter += `{key: "price", compare: GREATER_THAN_OR_EQUAL_TO, type: NUMERIC value: "${minPrice}"},`;
   if (maxPrice)
-    filter += `{key: "price", value: "50000", type: NUMERIC, compare: LESS_THAN_OR_EQUAL_TO},`;
+    filter += `{key: "price", value: ${maxPrice}, type: NUMERIC, compare: LESS_THAN_OR_EQUAL_TO},`;
   filter += "]";
 
   const { data } = await client.query({
