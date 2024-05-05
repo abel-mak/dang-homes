@@ -2,10 +2,10 @@ import { Input } from "components/Input";
 import { useEffect, useState } from "react";
 
 export const Filter = ({ updateQuery, submit, query }) => {
-  const [hasParking, setHasParking] = useState(query?.hasparking == "true");
-  const [petFriendly, setPetFriendly] = useState(query?.petfriendly == "true");
-  const [minPrice, setMinPrice] = useState(query?.minprice);
-  const [maxPrice, setMaxPrice] = useState(query?.maxprice);
+  const [hasParking, setHasParking] = useState(query?.hasParking == "true");
+  const [petFriendly, setPetFriendly] = useState(query?.petFriendly == "true");
+  const [minPrice, setMinPrice] = useState(query?.minPrice);
+  const [maxPrice, setMaxPrice] = useState(query?.maxPrice);
   // useEffect(() => console.log(hasParking), [hasParking]);
   console.log("filter query", query);
   // useEffect(() => {

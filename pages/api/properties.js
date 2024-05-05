@@ -6,13 +6,14 @@ export default async function properties(req, res) {
   const {
     bathrooms,
     bedrooms,
-    hasparking: hasParking,
-    petfriendly: petFriendly,
+    hasParking,
+    petFriendly,
     page = 1,
-    minprice: minPrice,
-    maxprice: maxPrice,
+    minPrice,
+    maxPrice,
   } = req.query;
   const offset = ((page < 1 ? 1 : page) - 1) * PAGE_SIZE;
+  // console.log(req.query);
   let filter = "[";
   if (hasParking)
     filter += `{ key: "has_parking" value: "${Number(
@@ -20,7 +21,7 @@ export default async function properties(req, res) {
     )}" },`;
   if (petFriendly)
     filter += `{ key: "pet_friendly" value: "${Number(
-      hasParking == "true"
+      petFriendly == "true"
     )}" },`;
   if (bathrooms) filter += `{ key: "bathrooms", value: "${bathrooms}" },`;
   if (bedrooms) filter += `{ key: "bedrooms", value: "${bedrooms}" },`;
@@ -63,5 +64,8 @@ export default async function properties(req, res) {
     `,
   });
   // console.log(filter);
-  return res.send({nodes: data.properties.nodes, pageInfo: data.properties.pageInfo});
+  return res.send({
+    nodes: data.properties.nodes,
+    pageInfo: data.properties.pageInfo,
+  });
 }

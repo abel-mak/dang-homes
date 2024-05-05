@@ -16,11 +16,11 @@ export const PropertySearch = () => {
   for (const key of searchParams.keys()) {
     const value = searchParams.get(key);
     if (
-      (key.toLowerCase() != "hasParking" &&
-        key.toLowerCase() != "petFriendly") ||
+      (key != "hasParking" &&
+        key != "petFriendly") ||
       value == "true"
     )
-      tmpQuery[key.toLowerCase()] = searchParams.get(key);
+      tmpQuery[key] = searchParams.get(key);
   }
   const [query, setQuery] = useState(tmpQuery);
 
